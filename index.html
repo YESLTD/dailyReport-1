@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DailyReport</title>
+    <meta name="description" content="web日报v0.1">
+    <meta name="author" content="mavisli">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="cleartype" content="on">
+
+    <!--&lt;!&ndash; iPhone &ndash;&gt;-->
+    <!--<link href="http://cdn.tapquo.com/lungo/icon-57.png" sizes="57x57" rel="apple-touch-icon">-->
+    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-320x460.png" media="(device-width: 320px) and (device-height: 480px)-->
+             <!--and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">-->
+
+    <!--&lt;!&ndash; iPhone (Retina) &ndash;&gt;-->
+    <!--<link href="http://cdn.tapquo.com/lungo/icon-114.png" sizes="114x114" rel="apple-touch-icon">-->
+    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-640x920.png" media="(device-width: 320px) and (device-height: 480px)-->
+             <!--and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">-->
+
+    <!--&lt;!&ndash; iPhone 5 &ndash;&gt;-->
+    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px)-->
+             <!--and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">-->
+
+    <!--&lt;!&ndash; iPad &ndash;&gt;-->
+    <!--<link href="http://cdn.tapquo.com/lungo/icon-72.png" sizes="72x72" rel="apple-touch-icon">-->
+    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-768x1004.png" media="(device-width: 768px) and (device-height: 1024px)-->
+             <!--and (orientation: portrait)-->
+             <!--and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">-->
+    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-748x1024.png" media="(device-width: 768px) and (device-height: 1024px)-->
+             <!--and (orientation: landscape)-->
+             <!--and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">-->
+
+    <!--&lt;!&ndash; iPad (Retina) &ndash;&gt;-->
+    <!--<link href="http://cdn.tapquo.com/lungo/icon-144.png" sizes="144x144" rel="apple-touch-icon">-->
+    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-1536x2008.png" media="(device-width: 768px) and (device-height: 1024px)-->
+             <!--and (orientation: portrait)-->
+             <!--and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">-->
+    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-1496x2048.png" media="(device-width: 768px) and (device-height: 1024px)-->
+             <!--and (orientation: landscape)-->
+             <!--and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">-->
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="components/lungo/lungo.css">
+    <link rel="stylesheet" href="components/lungo/lungo.icon.css">
+    <link rel="stylesheet" href="components/lungo/lungo.icon.brand.css">
+    <link rel="stylesheet" href="components/lungo/lungo.css">
+    <link rel="stylesheet" href="components/lungo/theme.lungo.css">
+</head>
+
+<body class="app">
+    <section id="main" data-transition="">
+        <header>
+            <nav class="left">
+                <a href="#features" data-router="aside" data-icon="menu"></a>
+            </nav>
+            <h3 class="title centered">Daily Report</h3>
+        </header>
+
+        <article id="main-article" class="active list indented scroll">
+            <div class="form">
+                <ul>
+                    <li class="dark">
+                        <strong>今天是2013/05/14。欢迎使用Daily Report。</strong>
+                    </li>
+                    <li>
+                        <label class="select">
+                            <select class="custom">
+                                <option value="1">李歆扬</option>
+                                <option value="2">徐山</option>
+                                <option value="3">廖青</option>
+                                <option value="4">赵阳</option>
+                                <option value="5">胡巍巍</option>
+                                <option value="6">李诗娇</option>
+                                <option value="7">许海芝</option>
+                                <option value="8">王鹏</option>
+                            </select>
+                        </label>
+                    </li>
+                    <li data-icon="book">
+                        <p>
+                            <fieldset>
+                                <textarea placeholder="今日完成："></textarea>
+                            </fieldset>
+
+                        </p>
+                    </li>
+                    <li data-icon="book">
+                        <p>
+                            <fieldset>
+                                <textarea placeholder="明天要做："></textarea>
+                            </fieldset>
+                        </p>
+                    </li>
+                    <li data-icon="brand github-2">
+                        <p>
+                            <fieldset>
+                                <textarea placeholder="备注："></textarea>
+                            </fieldset>
+                        </p>
+                    </li>
+                    <li>
+                        <a href="#" data-icon="brand twitter" class="button anchor theme" data-label="提交"></a>
+                    </li>
+                </ul>
+            </div>
+        </article>
+
+        <article id="second-article" class="list">
+            <li class="highlight">
+                <strong>
+                    历史记录
+                </strong>
+            </li>
+        </article>
+    </section>
+
+    <aside id="features">
+        <header data-title="设置"></header>
+        <article class="active list">
+            <ul>
+                <li class="current">
+                    <a href="#main-article" data-router="article">
+                        <strong>写日报</strong>
+                    </a>
+                </li>
+                <li class="current">
+                    <a href="#second-article" data-router="article">
+                        <strong>查看历史</strong>
+                    </a>
+                </li>
+            </ul>
+        </article>
+    </aside>
+
+    <!-- Lungo - Dependencies -->
+    <script src="components/quojs/quo.js"></script>
+    <script src="components/lungo/lungo.js"></script>
+    <!-- Lungo - Sandbox App -->
+    <script>
+        Lungo.init({
+            name: 'example'
+        });
+    </script>
+</body>
+</html>
