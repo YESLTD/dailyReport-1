@@ -62,3 +62,7 @@
 .icon.lock:before{content:"\0046"}
 .icon.map:before{content:"\0029"}
 .icon.eye:before{content:"\005e"}
+.icon.arrow-right:before{content:"\21F0"}
+.icon.arrow-left1:before{content:"\21AB"}
+.icon.arrow-right1:before{content:"\21AC"}
+.icon.back1:before{content:"\21BA"}

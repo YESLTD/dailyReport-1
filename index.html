@@ -50,15 +50,23 @@
     <link rel="stylesheet" href="components/lungo/lungo.icon.brand.css">
     <link rel="stylesheet" href="components/lungo/lungo.css">
     <link rel="stylesheet" href="components/lungo/theme.lungo.css">
+
+    <script type="text/javascript" src="mustache.js"></script>
+    <script type="text/javascript" src="data.js"></script>
 </head>
 
 <body class="app">
-    <section id="main" data-transition="">
+    <section id="main" data-pull="normal" data-transition="">
+
         <header>
             <nav class="left">
                 <a href="#features" data-router="aside" data-icon="menu"></a>
             </nav>
             <h3 class="title centered">Daily Report</h3>
+            <nav class="right">
+                <a href="#third-article" data-router="section" data-icon="arrow-right" class="button"></a>
+            </nav>
+
         </header>
 
         <article id="main-article" class="active list indented scroll">
@@ -69,15 +77,7 @@
                     </li>
                     <li>
                         <label class="select">
-                            <select class="custom">
-                                <option value="1">李歆扬</option>
-                                <option value="2">徐山</option>
-                                <option value="3">廖青</option>
-                                <option value="4">赵阳</option>
-                                <option value="5">胡巍巍</option>
-                                <option value="6">李诗娇</option>
-                                <option value="7">许海芝</option>
-                                <option value="8">王鹏</option>
+                            <select id="users" class="custom">
                             </select>
                         </label>
                     </li>
@@ -110,12 +110,115 @@
             </div>
         </article>
 
-        <article id="second-article" class="list">
-            <li class="highlight">
-                <strong>
-                    历史记录
-                </strong>
-            </li>
+    </section>
+
+    <section id="third-article" data-transition="slide">
+
+        <header>
+            <nav class="left">
+                <a href="#main" data-router="section" data-icon="home"></a>
+            </nav>
+            <h3 class="title centered">2013/05/16</h3>
+            <nav class="right">
+                <a href="#" data-router="article" data-title="2013/05/16" class="button" data-icon="arrow-left1"></a>
+                <a href="#" data-router="article" data-title="2013/05/17" class="button" data-icon="arrow-right1"></a>
+            </nav>
+        </header>
+
+
+        <article id="carousel-article" class="list scroll active indented">
+            <ul>
+                <li class="arrow secondary" value="1">
+                    <a href="#dp_mobile" data-router="section">
+                        <strong>移动产品部</strong>
+                    </a>
+                </li>
+                <li class="arrow secondary" value="2">
+                    <a href="#dp_design" data-router="section">
+                        <strong>交互设计部</strong>
+                    </a>
+                </li>
+                <li class="arrow secondary" value="3">
+                    <strong>test1部</strong>
+                </li>
+                <li class="arrow secondary" value="4">
+                    <strong>test2部</strong>
+                </li>
+            </ul>
+        </article>
+
+    </section>
+
+    <section id="dp_mobile">
+        <header>
+            <nav class="left">
+                <a href="#back" data-router="section" data-icon="back1"></a>
+            </nav>
+            <h3 class="title centered">移动产品部</h3>
+        </header>
+        <article class="list active scroll indented">
+            <ul>
+                <li class="thumb" data-icon="user">
+                    <strong>李歆扬</strong><br><br><br>
+                    <small>今日完成：xxx</small><br>
+                    <small>明天要做：xxx</small><br>
+                    <small>备注：xxx</small>
+                </li>
+                <li class="thumb" data-icon="user">
+                    <strong>徐山</strong><br><br><br>
+                    <small>今日完成：xxx</small><br>
+                    <small>明天要做：xxx</small><br>
+                    <small>备注：xxx</small>
+                </li>
+                <li class="thumb" data-icon="user">
+                    <strong>廖青</strong><br><br><br>
+                    <small>今日完成：xxx</small><br>
+                    <small>明天要做：xxx</small><br>
+                    <small>备注：xxx</small>
+                </li>
+                <li class="thumb" data-icon="user">
+                    <strong>胡巍巍</strong><br><br><br>
+                    <small>今日完成：xxx</small><br>
+                    <small>明天要做：xxx</small><br>
+                    <small>备注：xxx</small>
+                </li>
+            </ul>
+        </article>
+    </section>
+    <section id="dp_design">
+        <header>
+            <nav class="left">
+                <a href="#back" data-router="section" data-icon="back1"></a>
+            </nav>
+            <h3 class="title centered">交互设计部</h3>
+        </header>
+        <article class="list active scroll indented">
+            <ul>
+                <li class="thumb" data-icon="user">
+                    <strong>李诗娇</strong><br><br><br>
+                    <small>今日完成：xxx</small><br>
+                    <small>明天要做：xxx</small><br>
+                    <small>备注：xxx</small><br>
+                </li>
+                <li class="thumb" data-icon="user">
+                    <strong>许海芝</strong><br><br><br>
+                    <small>今日完成：xxx</small><br>
+                    <small>明天要做：xxx</small><br>
+                    <small>备注：xxx</small>
+                </li>
+                <li class="thumb" data-icon="user">
+                    <strong>王鹏</strong><br><br><br>
+                    <small>今日完成：xxx</small><br>
+                    <small>明天要做：xxx</small><br>
+                    <small>备注：xxx</small>
+                </li>
+                <li class="thumb" data-icon="user">
+                    <strong>赵阳</strong><br><br><br>
+                    <small>今日完成：xxx</small><br>
+                    <small>明天要做：xxx</small><br>
+                    <small>备注：xxx</small>
+                </li>
+            </ul>
         </article>
     </section>
 
@@ -129,8 +232,8 @@
                     </a>
                 </li>
                 <li class="current">
-                    <a href="#second-article" data-router="article">
-                        <strong>查看历史</strong>
+                    <a href="#" data-router="article">
+                        <strong>退出</strong>
                     </a>
                 </li>
             </ul>
@@ -141,10 +244,60 @@
     <script src="components/quojs/quo.js"></script>
     <script src="components/lungo/lungo.js"></script>
     <!-- Lungo - Sandbox App -->
+
     <script>
+
         Lungo.init({
-            name: 'example'
+            name: "dailyReport"
         });
+
+
+
+        // 查看各部门的当日日报
+//        Lungo.dom("#department").on("change", function(event) {
+//            var department = this.options[this.options.selectedIndex].value;
+//            if (department == DEPARTMENT_MOBILE) {
+//                Lungo.dom("#dp_mobile").addClass("active");
+//            } else if (department == DEPARTMENT_DESIGN) {
+//                Lungo.dom("#dp_design").addClass("active");
+//            }
+//        });
+
+//        var pull_example = new Lungo.Element.Pull('#main-article', {
+//            onPull: "下拉刷新",
+//            onRelease: "松开刷新",
+//            onRefresh: "Refreshing...",
+//            callback: function() {
+////                alert("Pull & Refresh completed!");
+//                pull_example.hide();
+//            }
+//        });
+
     </script>
 </body>
 </html>
+
+<script type="text/javascript">
+
+    (function(){
+        // 加载用户
+//      console.log(MOBILE_USERS, DESIGN_USERS);
+        var option = "";
+        for (var i=0; i<MOBILE_USERS.length; i++) {
+            option += "<option value='" + MOBILE_USERS[i].unum + "'>" + MOBILE_USERS[i].uname + "</option>";
+        }
+        for (var i=0; i<DESIGN_USERS.length; i++) {
+            option += "<option value='" + DESIGN_USERS[i].unum + "'>" + DESIGN_USERS[i].uname + "</option>";
+        }
+        Lungo.dom("#users").append(option);
+
+        // 加载部门
+
+
+    }());
+
+//    Lungo.dom("#carousel-article").on("load", function(event) { // 产品奇偶变色
+//        console.log(2);
+//    });
+
+</script>
