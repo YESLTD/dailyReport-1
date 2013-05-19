@@ -46,13 +46,15 @@ http.createServer(function (req, res) {
                 });
             });
         });
-    // 加载指定部门的用户
+    // 加载指定部门指定日期的用户
     } else if (pathname == "/loadDetail") {
         var udep = querystring.parse(query).udep;
+        var querydate = querystring.parse(query).querydate;
         console.log("------------ udep ------------ " + udep);
+        console.log("------------ querydate ------------ " + querydate);
         conn.open(function(err, db) {
             db.collection("dailyLogs", function(err, collection) {
-                collection.find({logger_dpid: udep}).toArray(function(err, data) {
+                collection.find({logger_dpid: udep, date: querydate}).toArray(function(err, data) {
                     console.log("------------- data ------------ \n", data);
                     var results = new Array();
                     for (var i=0; i<data.length; i++) {

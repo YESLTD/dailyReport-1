@@ -105,6 +105,13 @@
 
 
         <article id="carousel-article" class="list scroll active indented">
+            <div class="form">
+               <fieldset class="dark">
+                   <label for="customDate">
+                       <input id="customDate" type="date" />
+                   </label>
+               </fieldset>
+            </div>
             <ul id="department">
             </ul>
         </article>
@@ -206,14 +213,18 @@
     var today;
     var info;
     (function(){
-
         loadDepartmentSelectInfo();
 
         // 当前日期
         var date = new Date();
-        today = date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日";
-        Lungo.dom("#today").html(today);
-        Lungo.dom(".date").html(today);
+        var todayString = date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日";
+        if ((date.getMonth() + 1) < 10) {
+            var month = "0" + (date.getMonth() + 1);
+        }
+        var day = (date.getDate() < 10) ? ("0" + date.getDate()) : date.getDate();
+        today = date.getFullYear() + month + day;
+        Lungo.dom("#today").html(todayString);
+        Lungo.dom(".date").html(todayString);
     }());
 
     // 加载部门
@@ -236,11 +247,20 @@
 
     // 加载某部门当天的所有员工日志
     Lungo.dom(".dp").on("load", function(event) {
+
+        // 查询某个日期的日报
+        var queryDate = $("#customDate")[0].value.split("-");
+        var date = "";
+        for (var i in queryDate) {
+            date += queryDate[i];
+        }
+        date = date ? date : today;
+
         var dpnum = this.id.substring(2);
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://127.0.0.1:8124/loadDetail?udep=" + dpnum,
+            url: "http://127.0.0.1:8124/loadDetail?udep=" + dpnum + "&querydate=" + date,
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, "users", data);
