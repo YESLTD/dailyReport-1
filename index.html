@@ -12,45 +12,15 @@
     <meta name="format-detection" content="telephone=no">
     <meta http-equiv="cleartype" content="on">
 
-    <!--&lt;!&ndash; iPhone &ndash;&gt;-->
-    <!--<link href="http://cdn.tapquo.com/lungo/icon-57.png" sizes="57x57" rel="apple-touch-icon">-->
-    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-320x460.png" media="(device-width: 320px) and (device-height: 480px)-->
-             <!--and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">-->
-
-    <!--&lt;!&ndash; iPhone (Retina) &ndash;&gt;-->
-    <!--<link href="http://cdn.tapquo.com/lungo/icon-114.png" sizes="114x114" rel="apple-touch-icon">-->
-    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-640x920.png" media="(device-width: 320px) and (device-height: 480px)-->
-             <!--and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">-->
-
-    <!--&lt;!&ndash; iPhone 5 &ndash;&gt;-->
-    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px)-->
-             <!--and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">-->
-
-    <!--&lt;!&ndash; iPad &ndash;&gt;-->
-    <!--<link href="http://cdn.tapquo.com/lungo/icon-72.png" sizes="72x72" rel="apple-touch-icon">-->
-    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-768x1004.png" media="(device-width: 768px) and (device-height: 1024px)-->
-             <!--and (orientation: portrait)-->
-             <!--and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">-->
-    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-748x1024.png" media="(device-width: 768px) and (device-height: 1024px)-->
-             <!--and (orientation: landscape)-->
-             <!--and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">-->
-
-    <!--&lt;!&ndash; iPad (Retina) &ndash;&gt;-->
-    <!--<link href="http://cdn.tapquo.com/lungo/icon-144.png" sizes="144x144" rel="apple-touch-icon">-->
-    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-1536x2008.png" media="(device-width: 768px) and (device-height: 1024px)-->
-             <!--and (orientation: portrait)-->
-             <!--and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">-->
-    <!--<link href="http://cdn.tapquo.com/lungo/startup-image-1496x2048.png" media="(device-width: 768px) and (device-height: 1024px)-->
-             <!--and (orientation: landscape)-->
-             <!--and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">-->
-
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="components/lungo/lungo.css">
     <link rel="stylesheet" href="components/lungo/lungo.icon.css">
     <link rel="stylesheet" href="components/lungo/lungo.icon.brand.css">
     <link rel="stylesheet" href="components/lungo/lungo.css">
     <link rel="stylesheet" href="components/lungo/theme.lungo.css">
+    <link rel="stylesheet" href="privacy.css">
 
+    <script type="text/javascript" src="jq.mobi.min.js"></script>
     <script type="text/javascript" src="mustache.js"></script>
     <script type="text/javascript" src="data.js"></script>
 </head>
@@ -64,27 +34,35 @@
             </nav>
             <h3 class="title centered">Daily Report</h3>
             <nav class="right">
-                <a href="#third-article" data-router="section" data-icon="arrow-right" class="button"></a>
+                <a href="#third-article" data-router="section" data-icon="arrow-right" id="toThirdArticle" class="button"></a>
             </nav>
 
         </header>
 
         <article id="main-article" class="active list indented scroll">
-            <div class="form">
+            <div class="form" id="logForm">
                 <ul>
                     <li class="dark">
-                        <strong>今天是2013/05/14。欢迎使用Daily Report。</strong>
+                        <strong>今天是<span id="today"></span>。欢迎使用Daily Report。</strong>
                     </li>
                     <li>
+                        <span>------请选择您的部门------</span>
                         <label class="select">
-                            <select id="users" class="custom">
+                            <select id="allDepartments" class="custom">
+                            </select>
+                        </label>
+                    </li>
+                    <li>
+                        <span>------请选择您的姓名------</span>
+                        <label class="select">
+                            <select id="allusers" class="custom">
                             </select>
                         </label>
                     </li>
                     <li data-icon="book">
                         <p>
                             <fieldset>
-                                <textarea placeholder="今日完成："></textarea>
+                                <textarea placeholder="今日完成：" id="done"></textarea>
                             </fieldset>
 
                         </p>
@@ -92,19 +70,19 @@
                     <li data-icon="book">
                         <p>
                             <fieldset>
-                                <textarea placeholder="明天要做："></textarea>
+                                <textarea placeholder="明天要做：" id="plan"></textarea>
                             </fieldset>
                         </p>
                     </li>
                     <li data-icon="brand github-2">
                         <p>
                             <fieldset>
-                                <textarea placeholder="备注："></textarea>
+                                <textarea placeholder="备注：" id="remark"></textarea>
                             </fieldset>
                         </p>
                     </li>
                     <li>
-                        <a href="#" data-icon="brand twitter" class="button anchor theme" data-label="提交"></a>
+                        <a href="#" id="submitLog" data-icon="brand twitter" class="button anchor theme" data-label="提交"></a>
                     </li>
                 </ul>
             </div>
@@ -118,106 +96,42 @@
             <nav class="left">
                 <a href="#main" data-router="section" data-icon="home"></a>
             </nav>
-            <h3 class="title centered">2013/05/16</h3>
+            <h3 class="title centered currentDay"></h3>
             <nav class="right">
-                <a href="#" data-router="article" data-title="2013/05/16" class="button" data-icon="arrow-left1"></a>
-                <a href="#" data-router="article" data-title="2013/05/17" class="button" data-icon="arrow-right1"></a>
+                <a href="#" id="tomorrow" data-router="article" class="button" data-icon="arrow-left1"></a>
+                <a href="#" id="yesterday" data-router="article" class="button" data-icon="arrow-right1"></a>
             </nav>
         </header>
 
 
         <article id="carousel-article" class="list scroll active indented">
-            <ul>
-                <li class="arrow secondary" value="1">
-                    <a href="#dp_mobile" data-router="section">
-                        <strong>移动产品部</strong>
-                    </a>
-                </li>
-                <li class="arrow secondary" value="2">
-                    <a href="#dp_design" data-router="section">
-                        <strong>交互设计部</strong>
-                    </a>
-                </li>
-                <li class="arrow secondary" value="3">
-                    <strong>test1部</strong>
-                </li>
-                <li class="arrow secondary" value="4">
-                    <strong>test2部</strong>
-                </li>
+            <ul id="department">
             </ul>
         </article>
 
     </section>
 
-    <section id="dp_mobile">
+    <section id="dp1" class="dp">
         <header>
             <nav class="left">
                 <a href="#back" data-router="section" data-icon="back1"></a>
             </nav>
-            <h3 class="title centered">移动产品部</h3>
+            <h3 class="title centered date"></h3>
         </header>
         <article class="list active scroll indented">
-            <ul>
-                <li class="thumb" data-icon="user">
-                    <strong>李歆扬</strong><br><br><br>
-                    <small>今日完成：xxx</small><br>
-                    <small>明天要做：xxx</small><br>
-                    <small>备注：xxx</small>
-                </li>
-                <li class="thumb" data-icon="user">
-                    <strong>徐山</strong><br><br><br>
-                    <small>今日完成：xxx</small><br>
-                    <small>明天要做：xxx</small><br>
-                    <small>备注：xxx</small>
-                </li>
-                <li class="thumb" data-icon="user">
-                    <strong>廖青</strong><br><br><br>
-                    <small>今日完成：xxx</small><br>
-                    <small>明天要做：xxx</small><br>
-                    <small>备注：xxx</small>
-                </li>
-                <li class="thumb" data-icon="user">
-                    <strong>胡巍巍</strong><br><br><br>
-                    <small>今日完成：xxx</small><br>
-                    <small>明天要做：xxx</small><br>
-                    <small>备注：xxx</small>
-                </li>
+            <ul id="dp1users">
             </ul>
         </article>
     </section>
-    <section id="dp_design">
+    <section id="dp2" class="dp">
         <header>
             <nav class="left">
                 <a href="#back" data-router="section" data-icon="back1"></a>
             </nav>
-            <h3 class="title centered">交互设计部</h3>
+            <h3 class="title centered date"></h3>
         </header>
         <article class="list active scroll indented">
-            <ul>
-                <li class="thumb" data-icon="user">
-                    <strong>李诗娇</strong><br><br><br>
-                    <small>今日完成：xxx</small><br>
-                    <small>明天要做：xxx</small><br>
-                    <small>备注：xxx</small><br>
-                </li>
-                <li class="thumb" data-icon="user">
-                    <strong>许海芝</strong><br><br><br>
-                    <small>今日完成：xxx</small><br>
-                    <small>明天要做：xxx</small><br>
-                    <small>备注：xxx</small>
-                </li>
-                <li class="thumb" data-icon="user">
-                    <strong>王鹏</strong><br><br><br>
-                    <small>今日完成：xxx</small><br>
-                    <small>明天要做：xxx</small><br>
-                    <small>备注：xxx</small>
-                </li>
-                <li class="thumb" data-icon="user">
-                    <strong>赵阳</strong><br><br><br>
-                    <small>今日完成：xxx</small><br>
-                    <small>明天要做：xxx</small><br>
-                    <small>备注：xxx</small>
-                </li>
+            <ul id="dp2users">
             </ul>
         </article>
     </section>
@@ -251,53 +165,194 @@
             name: "dailyReport"
         });
 
-
-
-        // 查看各部门的当日日报
-//        Lungo.dom("#department").on("change", function(event) {
-//            var department = this.options[this.options.selectedIndex].value;
-//            if (department == DEPARTMENT_MOBILE) {
-//                Lungo.dom("#dp_mobile").addClass("active");
-//            } else if (department == DEPARTMENT_DESIGN) {
-//                Lungo.dom("#dp_design").addClass("active");
-//            }
-//        });
-
-//        var pull_example = new Lungo.Element.Pull('#main-article', {
-//            onPull: "下拉刷新",
-//            onRelease: "松开刷新",
-//            onRefresh: "Refreshing...",
-//            callback: function() {
-////                alert("Pull & Refresh completed!");
-//                pull_example.hide();
-//            }
-//        });
-
     </script>
 </body>
+
+<script type="text/template" id="userSelectListTpl">
+    {{#dusers}}
+    <option value="{{uid}}">{{uname}}</option>
+    {{/dusers}}
+</script>
+
+<script type="text/template" id="dpSelectListTpl">
+    {{#departments}}
+    <option value="{{dpnum}}">{{dpname}}</option>
+    {{/departments}}
+</script>
+
+<script type="text/template" id="dpListTpl">
+    {{#departments}}
+    <li class="arrow secondary" value="dp{{dpnum}}">
+        <a href="#dp{{dpnum}}" data-router="section">
+            <strong>{{dpname}}</strong>
+        </a>
+    </li>
+    {{/departments}}
+</script>
+
+<script type="text/template" id="dpuserListTpl">
+    {{#dusers}}
+    <li class="thumb" data-icon="user">
+        <strong>{{logger_name}}</strong><br><br><br>
+        <small>今日完成：{{done}}</small><br>
+        <small>明天要做：{{plan}}</small><br>
+        <small>备注：{{remark}}</small><br></li>
+    {{/dusers}}
+</script>
+
 </html>
 
 <script type="text/javascript">
-
+    var today;
+    var info;
     (function(){
-        // 加载用户
-//      console.log(MOBILE_USERS, DESIGN_USERS);
-        var option = "";
-        for (var i=0; i<MOBILE_USERS.length; i++) {
-            option += "<option value='" + MOBILE_USERS[i].unum + "'>" + MOBILE_USERS[i].uname + "</option>";
-        }
-        for (var i=0; i<DESIGN_USERS.length; i++) {
-            option += "<option value='" + DESIGN_USERS[i].unum + "'>" + DESIGN_USERS[i].uname + "</option>";
-        }
-        Lungo.dom("#users").append(option);
 
-        // 加载部门
+        loadDepartmentSelectInfo();
 
-
+        // 当前日期
+        var date = new Date();
+        today = date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日";
+        Lungo.dom("#today").html(today);
+        Lungo.dom(".date").html(today);
     }());
 
-//    Lungo.dom("#carousel-article").on("load", function(event) { // 产品奇偶变色
-//        console.log(2);
-//    });
+    // 加载部门
+    Lungo.dom("#toThirdArticle").on("click", function(event) {
+        $.ajax({
+            type: "POST",
+            dataType: JSON,
+            url: "http://127.0.0.1:8124/loadDepartments",
+            success: function(data) {
+                data = JSON.parse(data);
+//                console.log(typeof data, "departments", data);
+                var html = Mustache.render(Lungo.dom("#dpListTpl").html(), data);
+                Lungo.dom("#department").html(html);
+                Lungo.dom("#department li:nth-child(odd)").addClass("light");
+            },
+            error: function(data) {
+            }
+        });
+    });
+
+    // 加载某部门当天的所有员工日志
+    Lungo.dom(".dp").on("load", function(event) {
+        var dpnum = this.id.substring(2);
+        $.ajax({
+            type: "POST",
+            dataType: JSON,
+            url: "http://127.0.0.1:8124/loadDetail?udep=" + dpnum,
+            success: function(data) {
+                data = JSON.parse(data);
+//                console.log(typeof data, "users", data);
+                var html = Mustache.render(Lungo.dom("#dpuserListTpl").html(), data);
+                Lungo.dom("#dp" + dpnum + "users").html(html);
+            },
+            error: function(data) {
+            }
+        });
+    });
+
+    // 加载初始信息（部门 -> 人员）
+    function loadDepartmentSelectInfo() {
+        $.ajax({
+            type: "POST",
+            dataType: JSON,
+            url: "http://127.0.0.1:8124/loadInitInfo",
+            success: function(data) {
+                data = JSON.parse(data);
+//                console.log(typeof data, "departments", data);
+                var html = Mustache.render(Lungo.dom("#dpSelectListTpl").html(), data);
+                Lungo.dom("#allDepartments").html(html);
+
+                var initDepartment = data.departments[0];
+//                console.log("initDepartment", initDepartment);
+                var html = Mustache.render(Lungo.dom("#userSelectListTpl").html(), initDepartment);
+                Lungo.dom("#allusers").html(html);
+            },
+            error: function(data) {
+            }
+        });
+    }
+
+    // 部门 -> 人员
+    // todo 可以减少一次查询 ajax数据保存
+    Lungo.dom("#allDepartments").on("change", function(event) {
+        var udepnum = this.options[this.selectedIndex].value;
+//        console.log("udepnum : " + udepnum);
+        $.ajax({
+            type: "POST",
+            dataType: JSON,
+            url: "http://127.0.0.1:8124/loadUsers?udepnum=" + udepnum,
+            success: function(data) {
+                data = JSON.parse(data);
+//                console.log(typeof data, data);
+                var html = Mustache.render(Lungo.dom("#userSelectListTpl").html(), data);
+                Lungo.dom("#allusers").html(html);
+            },
+            error: function(data) {
+            }
+        });
+    });
+
+    // 提交日志
+    Lungo.dom("#submitLog").on("click", function(event) {
+        var logger_id = $("#allusers")[0].options[$("#allusers")[0].selectedIndex].value;
+        var logger_name = $("#allusers")[0].options[$("#allusers")[0].selectedIndex].text;
+        var logger_dpid = $("#allDepartments")[0].options[$("#allDepartments")[0].selectedIndex].value;
+        var logger_dpname = $("#allDepartments")[0].options[$("#allDepartments")[0].selectedIndex].text;
+        var args = {
+            "date": today,
+            "logger_id": logger_id,
+            "logger_name": logger_name,
+            "logger_dpid": logger_dpid,
+            logger_dpname: logger_dpname,
+            "done": $("#done")[0].value,
+            "plan": $("#plan")[0].value,
+            "remark": $("#remark")[0].value
+        }
+//        console.log("args:", args);
+
+        // 日期和姓名为必填项
+        var esstentialFlag = true;
+        if (today == "" || !today) {
+            esstentialFlag = false;
+        }
+        if (logger_id == "" || !logger_id) {
+            esstentialFlag = false;
+        }
+        if (!esstentialFlag) {
+            alert("您有必填项未选择！");
+            return false;
+        }
+
+        Lungo.Notification.confirm({
+            title: '',
+            description: '确认提交？',
+            accept: {
+                label: '确认',
+                callback: function(){
+                   insertLog(args);
+                }
+            },
+            cancel: {
+                label: '取消',
+                callback: function(){}
+            }
+        });
+    });
+
+    function insertLog(args) {
+        $.ajax({
+            type: "POST",
+            dataType: JSON,
+            url: "http://127.0.0.1:8124/submitLog?",
+            data: args,
+            success: function(data) {
+                console.log(typeof data, "users", data);
+            },
+            error: function(data) {
+            }
+        });
+    }
 
 </script>

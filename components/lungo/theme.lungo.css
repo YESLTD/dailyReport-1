@@ -170,6 +170,7 @@ section .list li a.light {
   background: #ebebeb;
   color: #7a7a7a;
 }
+
 section .list li.dark,
 section .list li a.dark,
 section .list li.selectable:active,
