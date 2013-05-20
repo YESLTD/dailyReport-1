@@ -43,7 +43,9 @@
             <div class="form" id="logForm">
                 <ul>
                     <li class="dark">
-                        <strong>今天是<span id="today"></span>。欢迎使用Daily Report。</strong>
+                        <strong>今天是<span id="today"></span>。欢迎使用Daily Report。
+                            <span id="written">您今天已经写过日报咯:-D。</span><span id="unwritten">您今天还未写日报哦。:- (</span>
+                        </strong>
                     </li>
                     <li>
                         <span>------请选择您的部门------</span>
@@ -206,6 +208,7 @@
 </html>
 
 <script type="text/javascript">
+    var todayString;
     var today;
     var month;
     var day;
@@ -215,7 +218,7 @@
 
         // 当前日期
         var date = new Date();
-        var todayString = date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日";
+        todayString = date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日";
         if ((date.getMonth() + 1) < 10) {
             month = "0" + (date.getMonth() + 1);
         }
@@ -225,13 +228,67 @@
 //        Lungo.dom(".date").html(todayString);
     }());
 
+//    Lungo.dom("#main").on("load", function(event) {
+//        loadUserTodayReport();
+//    });
+
+    Lungo.dom("#allusers").on("change", function(event) {
+        loadUserTodayReport();
+    });
+
+    function loadUserTodayReport() {
+
+//        console.log($("#allDepartments")[0].selectedIndex, $("#allusers")[0].selectedIndex);
+        if ($("#allDepartments")[0].selectedIndex < 0 || $("#allusers")[0].selectedIndex < 0) {
+            $("#written").hide();
+            $("#unwritten").hide();
+        } else {
+            var udpid = $("#allDepartments")[0].options[$("#allDepartments")[0].selectedIndex].value;
+            var uid = $("#allusers")[0].options[$("#allusers")[0].selectedIndex].value;
+//        console.log("dep: ",udpid, " uid: ", uid, " today: ", today);
+
+            var args = {
+                "date": today,
+                "logger_id": uid,
+                "logger_dpid": udpid
+            }
+            $.ajax({
+                type: "POST",
+                dataType: JSON,
+//            url: "http://192.168.0.108:8124/loadTodayReport",
+                url: "http://127.0.0.1:8124/loadTodayReport?",
+                data: args,
+                success: function(data) {
+                    data = JSON.parse(data);
+//                console.log(typeof data, data);
+                    if (data["results"].exist) {
+                        $("#done").val(data["results"].done);
+                        $("#plan").val(data["results"].plan);
+                        $("#remark").val(data["results"].remark);
+                        $("#written").show();
+                        $("#unwritten").hide();
+                    } else {
+                        $("#done").val("");
+                        $("#plan").val("");
+                        $("#remark").val("");
+                        $("#unwritten").show();
+                        $("#written").hide();
+                    }
+                },
+                error: function(data) {
+                }
+            });
+        }
+    }
+
     // 加载部门
     Lungo.dom("#toThirdArticle").on("click", function(event) {
-        $("#customDate")[0].value =  new Date().getFullYear() + "-" + month + "-" + day;
+//        $("#customDate")[0].value =  new Date().getFullYear() + "-" + month + "-" + day;
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://192.168.0.108:8124/loadDepartments",
+//            url: "http://192.168.0.108:8124/loadDepartments",
+            url: "http://127.0.0.1:8124/loadDepartments",
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, "departments", data);
@@ -256,12 +313,17 @@
         date = date ? date : today;
 
         var dpnum = this.id.substring(2);
-        Lungo.dom("#dp" +  dpnum + " .customDate").html($("#customDate")[0].value);
+        if ($("#customDate")[0].value == "") {
+            Lungo.dom("#dp" +  dpnum + " .customDate").html("今天");
+        } else {
+            Lungo.dom("#dp" +  dpnum + " .customDate").html($("#customDate")[0].value);
+        }
 
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://192.168.0.108:8124/loadDetail?udep=" + dpnum + "&querydate=" + date,
+//            url: "http://192.168.0.108:8124/loadDetail?udep=" + dpnum + "&querydate=" + date,
+            url: "http://127.0.0.1:8124/loadDetail?udep=" + dpnum + "&querydate=" + date,
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, "users", data);
@@ -278,7 +340,8 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://192.168.0.108:8124/loadInitInfo",
+//            url: "http://192.168.0.108:8124/loadInitInfo",
+            url: "http://127.0.0.1:8124/loadInitInfo",
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, "departments", data);
@@ -289,6 +352,8 @@
 //                console.log("initDepartment", initDepartment);
                 var html = Mustache.render(Lungo.dom("#userSelectListTpl").html(), initDepartment);
                 Lungo.dom("#allusers").html(html);
+
+                loadUserTodayReport();
             },
             error: function(data) {
             }
@@ -303,12 +368,15 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://192.168.0.108:8124/loadUsers?udepnum=" + udepnum,
+//            url: "http://192.168.0.108:8124/loadUsers?udepnum=" + udepnum,
+            url: "http://127.0.0.1:8124/loadUsers?udepnum=" + udepnum,
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, data);
                 var html = Mustache.render(Lungo.dom("#userSelectListTpl").html(), data);
                 Lungo.dom("#allusers").html(html);
+
+                loadUserTodayReport();
             },
             error: function(data) {
             }
@@ -366,10 +434,11 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://192.168.0.108:8124/submitLog?",
+//            url: "http://192.168.0.108:8124/submitLog?",
+            url: "http://127.0.0.1:8124/submitLog?",
             data: args,
             success: function(data) {
-                console.log(typeof data, "users", data);
+//                console.log(typeof data, "users", data);
             },
             error: function(data) {
             }
