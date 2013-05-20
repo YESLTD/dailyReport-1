@@ -6,7 +6,7 @@
     <meta name="description" content="web日报v0.1">
     <meta name="author" content="mavisli">
     <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
@@ -119,7 +119,7 @@
             <nav class="left">
                 <a href="#back" data-router="section" data-icon="back1"></a>
             </nav>
-            <h3 class="title centered date"></h3>
+            <h3 class="title centered customDate"></h3>
         </header>
         <article class="list active scroll indented">
             <ul id="dp1users">
@@ -131,7 +131,7 @@
             <nav class="left">
                 <a href="#back" data-router="section" data-icon="back1"></a>
             </nav>
-            <h3 class="title centered date"></h3>
+            <h3 class="title centered customDate"></h3>
         </header>
         <article class="list active scroll indented">
             <ul id="dp2users">
@@ -222,7 +222,7 @@
         day = (date.getDate() < 10) ? ("0" + date.getDate()) : date.getDate();
         today = date.getFullYear() + month + day;
         Lungo.dom("#today").html(todayString);
-        Lungo.dom(".date").html(todayString);
+//        Lungo.dom(".date").html(todayString);
     }());
 
     // 加载部门
@@ -231,7 +231,7 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://127.0.0.1:8124/loadDepartments",
+            url: "http://192.168.0.108:8124/loadDepartments",
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, "departments", data);
@@ -256,10 +256,12 @@
         date = date ? date : today;
 
         var dpnum = this.id.substring(2);
+        Lungo.dom("#dp" +  dpnum + " .customDate").html($("#customDate")[0].value);
+
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://127.0.0.1:8124/loadDetail?udep=" + dpnum + "&querydate=" + date,
+            url: "http://192.168.0.108:8124/loadDetail?udep=" + dpnum + "&querydate=" + date,
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, "users", data);
@@ -276,7 +278,7 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://127.0.0.1:8124/loadInitInfo",
+            url: "http://192.168.0.108:8124/loadInitInfo",
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, "departments", data);
@@ -301,7 +303,7 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://127.0.0.1:8124/loadUsers?udepnum=" + udepnum,
+            url: "http://192.168.0.108:8124/loadUsers?udepnum=" + udepnum,
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, data);
@@ -364,7 +366,7 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-            url: "http://127.0.0.1:8124/submitLog?",
+            url: "http://192.168.0.108:8124/submitLog?",
             data: args,
             success: function(data) {
                 console.log(typeof data, "users", data);
