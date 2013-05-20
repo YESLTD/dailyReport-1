@@ -110,7 +110,8 @@ function saveLog(info, req) {
     // 时间戳
     var ts = new Date().getTime();
     var i = ts % 1000;
-    var t = new mongodb.BSONPure.Timestamp(i, Math.floor(ts * 0.001));
+//    var t = new mongodb.BSONPure.Timestamp(i, Math.floor(ts * 0.001));
+    var t = Math.floor(ts * 0.001);
 //    console.log("--------- timestamp ----- ", t);
     conn.open(function(err, db) {
         db.collection("dailyLogs", function(err, collection) {
