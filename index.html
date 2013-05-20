@@ -105,9 +105,8 @@
         <article id="carousel-article" class="list scroll active indented">
             <div class="form">
                <fieldset class="dark">
-                   <label for="customDate">
-                       <input id="customDate" type="date" />
-                   </label>
+                   <label>日期</label>
+                   <input type="date" class="align_right" id="customDate"/>
                </fieldset>
             </div>
             <ul id="department">
@@ -208,6 +207,9 @@
 </html>
 
 <script type="text/javascript">
+//    var prefix = "http://192.168.0.108:8124";
+    var prefix = "http://127.0.0.1:8124";
+
     var todayString;
     var today;
     var month;
@@ -225,12 +227,7 @@
         day = (date.getDate() < 10) ? ("0" + date.getDate()) : date.getDate();
         today = date.getFullYear() + month + day;
         Lungo.dom("#today").html(todayString);
-//        Lungo.dom(".date").html(todayString);
     }());
-
-//    Lungo.dom("#main").on("load", function(event) {
-//        loadUserTodayReport();
-//    });
 
     Lungo.dom("#allusers").on("change", function(event) {
         loadUserTodayReport();
@@ -238,25 +235,19 @@
 
     function loadUserTodayReport() {
 
-//        console.log($("#allDepartments")[0].selectedIndex, $("#allusers")[0].selectedIndex);
         if ($("#allDepartments")[0].selectedIndex < 0 || $("#allusers")[0].selectedIndex < 0) {
             $("#written").hide();
             $("#unwritten").hide();
         } else {
-            var udpid = $("#allDepartments")[0].options[$("#allDepartments")[0].selectedIndex].value;
             var uid = $("#allusers")[0].options[$("#allusers")[0].selectedIndex].value;
-//        console.log("dep: ",udpid, " uid: ", uid, " today: ", today);
-
             var args = {
                 "date": today,
-                "logger_id": uid,
-                "logger_dpid": udpid
+                "logger_id": uid
             }
             $.ajax({
                 type: "POST",
                 dataType: JSON,
-//            url: "http://192.168.0.108:8124/loadTodayReport",
-                url: "http://127.0.0.1:8124/loadTodayReport?",
+                url: prefix + "/loadTodayReport?",
                 data: args,
                 success: function(data) {
                     data = JSON.parse(data);
@@ -283,22 +274,6 @@
 
     // 加载部门
     Lungo.dom("#toThirdArticle").on("click", function(event) {
-//        $("#customDate")[0].value =  new Date().getFullYear() + "-" + month + "-" + day;
-        $.ajax({
-            type: "POST",
-            dataType: JSON,
-//            url: "http://192.168.0.108:8124/loadDepartments",
-            url: "http://127.0.0.1:8124/loadDepartments",
-            success: function(data) {
-                data = JSON.parse(data);
-//                console.log(typeof data, "departments", data);
-                var html = Mustache.render(Lungo.dom("#dpListTpl").html(), data);
-                Lungo.dom("#department").html(html);
-                Lungo.dom("#department li:nth-child(odd)").addClass("light");
-            },
-            error: function(data) {
-            }
-        });
     });
 
     // 加载某部门当天的所有员工日志
@@ -322,8 +297,7 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-//            url: "http://192.168.0.108:8124/loadDetail?udep=" + dpnum + "&querydate=" + date,
-            url: "http://127.0.0.1:8124/loadDetail?udep=" + dpnum + "&querydate=" + date,
+            url: prefix + "/loadDetail?udep=" + dpnum + "&querydate=" + date,
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, "users", data);
@@ -340,8 +314,7 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-//            url: "http://192.168.0.108:8124/loadInitInfo",
-            url: "http://127.0.0.1:8124/loadInitInfo",
+            url: prefix + "/loadInitInfo",
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, "departments", data);
@@ -352,6 +325,11 @@
 //                console.log("initDepartment", initDepartment);
                 var html = Mustache.render(Lungo.dom("#userSelectListTpl").html(), initDepartment);
                 Lungo.dom("#allusers").html(html);
+
+
+                var html = Mustache.render(Lungo.dom("#dpListTpl").html(), data);
+                Lungo.dom("#department").html(html);
+                Lungo.dom("#department li:nth-child(odd)").addClass("light");
 
                 loadUserTodayReport();
             },
@@ -368,8 +346,7 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-//            url: "http://192.168.0.108:8124/loadUsers?udepnum=" + udepnum,
-            url: "http://127.0.0.1:8124/loadUsers?udepnum=" + udepnum,
+            url: prefix + "/loadUsers?udepnum=" + udepnum,
             success: function(data) {
                 data = JSON.parse(data);
 //                console.log(typeof data, data);
@@ -377,6 +354,7 @@
                 Lungo.dom("#allusers").html(html);
 
                 loadUserTodayReport();
+
             },
             error: function(data) {
             }
@@ -399,7 +377,11 @@
             "plan": $("#plan")[0].value,
             "remark": $("#remark")[0].value
         }
-//        console.log("args:", args);
+
+        if ((!args.done || args.done=="") && (!args.plan && args.plan=="") && (!args.remark && args.remark=="")) {
+            alert("请不要提交空白日志哦。");
+            return false;
+        }
 
         // 日期和姓名为必填项
         var esstentialFlag = true;
@@ -420,7 +402,7 @@
             accept: {
                 label: '确认',
                 callback: function(){
-                   insertLog(args);
+//                   insertLog(args);
                 }
             },
             cancel: {
@@ -434,11 +416,22 @@
         $.ajax({
             type: "POST",
             dataType: JSON,
-//            url: "http://192.168.0.108:8124/submitLog?",
-            url: "http://127.0.0.1:8124/submitLog?",
+            url: prefix + "/submitLog?",
             data: args,
             success: function(data) {
-//                console.log(typeof data, "users", data);
+                data = JSON.parse(data);
+//                console.log(typeof data, data);
+                if (data.status == "insertsuc") {
+                    alert("插入成功");
+                    $("#written").show();
+                    $("#unwritten").hide();
+                } else if (data.status == "insertfail") {
+                    alert("插入失败");
+                } else if (data.status == "modified") {
+                    alert("更新成功");
+                    $("#written").show();
+                    $("#unwritten").hide();
+                }
             },
             error: function(data) {
             }

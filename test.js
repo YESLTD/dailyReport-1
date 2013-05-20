@@ -6,12 +6,14 @@ var http = require('http'),
 //    mongoose = require('mongoose'),
     mongodb = require('mongodb');
 
-//var server = new mongodb.Server("192.168.0.133", 27017); //连接Mongodb
-var server = new mongodb.Server("localhost", 27017); //连接Mongodb
+var server = new mongodb.Server("192.168.0.133", 27017); //连接Mongodb
+//var server = new mongodb.Server("localhost", 27017); //连接Mongodb
 var conn = new mongodb.Db("dailyReport", server, {safe: false});
 
-
 http.createServer(function (req, res) {
+
+    req.setMaxListeners(0);
+
     var pathname = url.parse(req.url).pathname;
     var query = url.parse(req.url).query;
     console.log(" --------------- pathname : ", pathname, "\n ------------ query : ", query);
@@ -84,7 +86,7 @@ http.createServer(function (req, res) {
             info += data;
         }).addListener('end', function(){
             info = querystring.parse(info);
-            saveLog(info, req);
+            saveLog(info, req, res);
         });
         // 加载初始信息
     } else if (pathname == "/loadInitInfo") {
@@ -114,12 +116,13 @@ http.createServer(function (req, res) {
     });
 
 }).listen(8124, "127.0.0.1");
+//}).listen(8124, "192.168.0.108");
 
 function queryLog(info, res) {
     console.log("-------- 查询当天是否写了日报，POST参数----------- \n", info);
     conn.open(function(err, db) {
         db.collection("dailyLogs", function(err, collection) {
-            collection.find({logger_id:info.logger_id, date:info.date}).toArray(function(err, data) {
+            collection.find({"logger_id":info.logger_id, "date":info.date}).toArray(function(err, data) {
                 console.log("----------------- 查询结果为 ----------------- \n", data, data.length);
                 if (!data || data=="") {
                     var results = {
@@ -148,7 +151,7 @@ function queryLog(info, res) {
 
 
 // 插入日志
-function saveLog(info, req) {
+function saveLog(info, req, res) {
     console.log("------ info ---------- \n", info);
     // 客户端IP
     var ip = req.connection.remoteAddress;
@@ -161,7 +164,7 @@ function saveLog(info, req) {
 //    console.log("--------- timestamp ----- ", t);
     conn.open(function(err, db) {
         db.collection("dailyLogs", function(err, collection) {
-            collection.find({logger_id: info.logger_id, date: info.date}).toArray(function(err, data) {
+            collection.find({"logger_id": info.logger_id, "date": info.date}).toArray(function(err, data) {
                 console.log("-------------- err ------------------ ", err);
                 console.log("------------- 查询是否有重复log ------------ \n", data);
                 // 不重复
@@ -175,9 +178,15 @@ function saveLog(info, req) {
                         "modifylog": [{"done": info.done, "plan": info.plan, "remark": info.remark, "lastEditor": ip, "lastModifiedTime": t}]
                     }, function(err, data) {
                         if (data) {
+                            res.writeHead(200, {"Content-Type": "application/json"});
+                            res.end(JSON.stringify({"status": "insertsuc"}));
                             console.log("---------------- 插入日志成功 ----------- \n");
+                            conn.close();
                         } else {
+                            res.writeHead(200, {"Content-Type": "application/json"});
+                            res.end(JSON.stringify({"status": "insertfail"}));
                             console.log("----------------- 插入日志失败 ----------- \n");
+                            conn.close();
                         }
                     });
                 } else {
@@ -191,7 +200,7 @@ function saveLog(info, req) {
                         "lastModifiedTime": t
                     };
                     collection.update(
-                        {logger_id: info.logger_id, date: info.date},
+                        {"logger_id": info.logger_id, "date": info.date},
                         {   $set: {
                             "date": info.date,
                             "logger_name": info.logger_name,
@@ -203,9 +212,11 @@ function saveLog(info, req) {
                                 modifylog: newModifyLog
                             }
                         });
+                    res.writeHead(200, {"Content-Type": "application/json"});
+                    res.end(JSON.stringify({"status": "modified"}));
                     console.log("------------------- 更新后的Log为 ---------------\n", data);
+                    conn.close();
                 }
-                conn.close();
             });
         });
     });
