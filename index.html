@@ -211,6 +211,8 @@
 
 <script type="text/javascript">
     var today;
+    var month;
+    var day;
     var info;
     (function(){
         loadDepartmentSelectInfo();
@@ -219,9 +221,9 @@
         var date = new Date();
         var todayString = date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日";
         if ((date.getMonth() + 1) < 10) {
-            var month = "0" + (date.getMonth() + 1);
+            month = "0" + (date.getMonth() + 1);
         }
-        var day = (date.getDate() < 10) ? ("0" + date.getDate()) : date.getDate();
+        day = (date.getDate() < 10) ? ("0" + date.getDate()) : date.getDate();
         today = date.getFullYear() + month + day;
         Lungo.dom("#today").html(todayString);
         Lungo.dom(".date").html(todayString);
@@ -229,6 +231,7 @@
 
     // 加载部门
     Lungo.dom("#toThirdArticle").on("click", function(event) {
+        $("#customDate")[0].value =  new Date().getFullYear() + "-" + month + "-" + day;
         $.ajax({
             type: "POST",
             dataType: JSON,
