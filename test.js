@@ -115,8 +115,8 @@ http.createServer(function (req, res) {
         console.log(" ------------ db close ------------ \n");
     });
 
-}).listen(8124, "127.0.0.1");
-//}).listen(8124, "192.168.0.108");
+//}).listen(8124, "127.0.0.1");
+}).listen(8124, "192.168.0.108");
 
 function queryLog(info, res) {
     console.log("-------- 查询当天是否写了日报，POST参数----------- \n", info);
